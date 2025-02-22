@@ -1,9 +1,12 @@
 import express from 'express';
 import fetch, { Headers } from 'node-fetch';
+import cors from 'cors';
 import { config } from '../config/config.js';
 
 const app = express();
 const port = 3000;
+
+app.use(cors());
 
 const generateToken = async () => {
   const { authUrl, clientId, clientSecret, grantType, scope } = config;

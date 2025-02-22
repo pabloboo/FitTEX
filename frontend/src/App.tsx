@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './App.css';
+import "./App.css";
+import { mockApiCall, mockTextSearchApiCall } from "./services/mockApi";
+
 
 const fetchProducts = async (imageUrl: string) => {
   try {
@@ -20,6 +22,8 @@ function App() {
   const [, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [animateUp, setAnimateUp] = useState(false);
+  const [showResults, setShowResults] = useState(false);
 
   const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target?.files[0]) {
@@ -39,17 +43,31 @@ function App() {
       const response = await fetchProducts(imageUrl);
       setApiResponse(response);
       setLoading(false);
+          setAnimateUp(true);
+ // Delay results 500ms
+    setTimeout(() => {
+      setShowResults(true);
+      setLoading(false);
+    }, 500);
     }
   };
 
-  const handleTextSearch = () => {
-    //TODO: Implement text search functionality
-    console.log("Searching for:", searchQuery);
+  const handleTextSearch = async () => {
+    setLoading(true);
+    const response = await mockTextSearchApiCall(searchQuery);
+    setApiResponse(response);
+    setAnimateUp(true);
+
+    // Delay results 500ms
+    setTimeout(() => {
+      setShowResults(true);
+      setLoading(false);
+    }, 500);
   };
 
   return (
     <div className="App">
-      <div className="search-container">
+      <div className={`search-container ${animateUp ? "animate-up" : ""}`}>
         <img src="/src/assets/logo-FitTEX.png" alt="Logo" className="logo" />
         <div className="search-bar">
           <input
@@ -83,8 +101,7 @@ function App() {
 
       {/* Show response of the API */}
       {apiResponse && (
-        <div className="results-container">
-          <h2>Products found:</h2>
+        <div className={`results-container ${showResults ? "show" : ""}`}>
           <ul>
             {apiResponse.map((product) => (
               <li key={product.id}>
