@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './App.css';
-import {config} from "dotenv";
 
 const fetchProducts = async (imageUrl: string) => {
-
   try {
     const response = await axios.get('http://localhost:3000/products', {
       params: { imageUrl },
@@ -17,32 +15,36 @@ const fetchProducts = async (imageUrl: string) => {
 };
 
 function App() {
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [apiResponse, setApiResponse] = useState<any[] | null>(null);
+  const [, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target?.files[0]) {
       const file = event.target?.files[0];
-      await handleSearch(file);
-    }
-  };
+      setSelectedImage(file);
 
-  const handleSearch = async (file: File) => {
-    setLoading(true);
-    const imageUrl = URL.createObjectURL(file);
-    const response = await fetchProducts(imageUrl);
-    setApiResponse(response);
-    setLoading(false);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+
+      // Trigger search after image is selected
+      setLoading(true);
+      let imageUrl = URL.createObjectURL(file);
+      imageUrl = imageUrl.replace('blob:', '');
+      const response = await fetchProducts(imageUrl);
+      setApiResponse(response);
+      setLoading(false);
+    }
   };
 
   const handleTextSearch = () => {
     //TODO: Implement text search functionality
     console.log("Searching for:", searchQuery);
-  };
-
-  const triggerFileInput = () => {
-    document.getElementById("file-upload")?.click();
   };
 
   return (
@@ -58,7 +60,7 @@ function App() {
           />
           <button onClick={handleTextSearch}>Search</button>
           <button
-            onClick={triggerFileInput}
+            onClick={() => document.getElementById("file-upload")?.click()}
             disabled={loading}
             className={`image-search-button ${loading ? "loading" : ""}`}
             title="Search by image"
