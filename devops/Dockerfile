@@ -19,6 +19,12 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     uv sync --frozen --no-install-project --no-dev
 
+RUN apt-get update && apt-get install -y \
+    curl \
+    tar \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
 # Then, add the rest of the project source code and install it
 # Installing separately from its dependencies allows optimal layer caching
 ADD . $APP_HOME
@@ -28,11 +34,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 # Place executables in the environment at the front of the path
 ENV PATH=${VIRTUAL_ENV}/bin:${PATH}
 
-FROM ollama/ollama
-
-ARG APP_HOME
-ARG VIRTUAL_ENV
-WORKDIR $APP_HOME
-
-COPY --from=build --chmod=755 $VIRTUAL_ENV $VIRTUAL_ENV
+RUN curl -L https://ollama.com/download/ollama-linux-amd64.tgz -o ollama-linux-amd64.tgz \
+    && tar -C /usr -xzf ollama-linux-amd64.tgz \
+    && rm ollama-linux-amd64.tgz
 
