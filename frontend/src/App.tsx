@@ -6,6 +6,8 @@ function App() {
   const [apiResponse, setApiResponse] = useState<any[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [animateUp, setAnimateUp] = useState(false);
+  const [showResults, setShowResults] = useState(false);
 
   const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -19,7 +21,13 @@ function App() {
     const imageUrl = URL.createObjectURL(file);
     const response = await mockApiCall(imageUrl);
     setApiResponse(response);
-    setLoading(false);
+    setAnimateUp(true);
+
+    // Delay results 500ms
+    setTimeout(() => {
+      setShowResults(true);
+      setLoading(false);
+    }, 500);
   };
 
   const handleTextSearch = () => {
@@ -33,7 +41,7 @@ function App() {
 
   return (
     <div className="App">
-      <div className="search-container">
+      <div className={`search-container ${animateUp ? "animate-up" : ""}`}>
         <img src="/src/assets/logo-FitTEX.png" alt="Logo" className="logo" />
         <div className="search-bar">
           <input
@@ -65,10 +73,9 @@ function App() {
         />
       </div>
 
-      {/* Show response of the API */}
+      {/* Mostrar resultados con retraso */}
       {apiResponse && (
-        <div className="results-container">
-          <h2>Products found:</h2>
+        <div className={`results-container ${showResults ? "show" : ""}`}>
           <ul>
             {apiResponse.map((product) => (
               <li key={product.id}>
