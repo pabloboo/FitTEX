@@ -1,4 +1,3 @@
-```markdown
 # 🛍️ FitTEX 🖼️
 
 ¡Bienvenido al proyecto **FitTEX**! Esta aplicación permite a los usuarios seleccionar una imagen y buscar productos relacionados en las marcas de ropa de Inditex. Desarrollada con **React** y **TypeScript**, es una muestra de cómo integrar funcionalidades de búsqueda y visualización de datos en una interfaz moderna.
@@ -117,13 +116,9 @@ Este proyecto está bajo la licencia **MIT**. Para más detalles, consulta el ar
 
 ## 🙌 Créditos
 
-- Desarrollado por [Mar](https://github.com/MarAlonsoGarcia).
-- Desarrollado por [Pablo](https://github.com/pabloboo).
-- Desarrollado por [Jandro](https://github.com/jandrogarciagarcia).
-- Desarrollado por [Abel](https://github.com/AbelJuncal).
-- Inspirado en [Inditex API](https://api-sandbox.inditex.com).
+- Desarrollado por [Mar](https://github.com/MarAlonsoGarcia), [Pablo](https://github.com/pabloboo), [Jandro](https://github.com/jandrogarciagarcia) y[Abel](https://github.com/AbelJuncal).
+- Inspirado en [API Inditex](https://developer.inditex.com/apimktplc/web/products).
 
 ---
 
 ¡Gracias por visitar este proyecto! Si tienes alguna pregunta o sugerencia, no dudes en abrir un issue o contactar con los desarrolladores. 😊
-```
