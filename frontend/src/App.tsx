@@ -1,6 +1,20 @@
-import { useState } from "react";
-import "./App.css";
-import { mockApiCall } from "./services/mockApi";
+import React, { useState } from 'react';
+import axios from 'axios';
+import './App.css';
+import {config} from "dotenv";
+
+const fetchProducts = async (imageUrl: string) => {
+
+  try {
+    const response = await axios.get('http://localhost:3000/products', {
+      params: { imageUrl },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    return null;
+  }
+};
 
 function App() {
   const [apiResponse, setApiResponse] = useState<any[] | null>(null);
@@ -8,8 +22,8 @@ function App() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
+    if (event.target.files && event.target?.files[0]) {
+      const file = event.target?.files[0];
       await handleSearch(file);
     }
   };
@@ -17,7 +31,7 @@ function App() {
   const handleSearch = async (file: File) => {
     setLoading(true);
     const imageUrl = URL.createObjectURL(file);
-    const response = await mockApiCall(imageUrl);
+    const response = await fetchProducts(imageUrl);
     setApiResponse(response);
     setLoading(false);
   };
