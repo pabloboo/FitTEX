@@ -15,6 +15,8 @@ DATA_PATH?=$(shell pwd)/data
         --name $(PROJECT_NAME)-container \
         -v $(shell pwd):/opt/project \
         -v $(DATA_PATH):/data \
+        --privileged \
+        --gpus all \
         $(PROJECT_NAME) \
         bash
 
