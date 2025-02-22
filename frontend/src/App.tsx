@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./App.css";
-import { mockApiCall } from "./services/mockApi";
+import { mockApiCall, mockTextSearchApiCall } from "./services/mockApi";
 
 function App() {
   const [apiResponse, setApiResponse] = useState<any[] | null>(null);
@@ -30,9 +30,17 @@ function App() {
     }, 500);
   };
 
-  const handleTextSearch = () => {
-    //TODO: Implement text search functionality
-    console.log("Searching for:", searchQuery);
+  const handleTextSearch = async () => {
+    setLoading(true);
+    const response = await mockTextSearchApiCall(searchQuery);
+    setApiResponse(response);
+    setAnimateUp(true);
+
+    // Delay results 500ms
+    setTimeout(() => {
+      setShowResults(true);
+      setLoading(false);
+    }, 500);
   };
 
   const triggerFileInput = () => {
