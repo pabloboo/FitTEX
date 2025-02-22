@@ -6,6 +6,7 @@ function App() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [apiResponse, setApiResponse] = useState<any[] | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -23,9 +24,12 @@ function App() {
 
   const handleSearch = async () => {
     if (selectedImage) {
+      setLoading(true);
       const imageUrl = URL.createObjectURL(selectedImage);
       const response = await mockApiCall(imageUrl);
       setApiResponse(response);
+      setImagePreview(null);
+      setLoading(false);
     }
   };
 
@@ -42,7 +46,9 @@ function App() {
           accept="image/*"
           onChange={handleImageChange}
         />
-        <button onClick={handleSearch}>Buscar productos</button>
+        <button onClick={handleSearch} disabled={loading}>
+          {loading ? "Buscando..." : "Buscar productos"}
+        </button>
       </div>
 
       {/* Preview of the image */}
