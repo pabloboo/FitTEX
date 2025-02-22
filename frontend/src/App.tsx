@@ -1,35 +1,54 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import './App.css';
+import { mockApiCall } from './services/mockApi';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [apiResponse, setApiResponse] = useState<any[] | null>(null);
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      setSelectedImage(event.target.files[0]);
+    }
+  };
+
+  const handleSearch = async () => {
+    if (selectedImage) {
+      // Simulamos la URL de la imagen seleccionada
+      const imageUrl = URL.createObjectURL(selectedImage);
+
+      // Llamamos a la función mock
+      const response = await mockApiCall(imageUrl);
+      setApiResponse(response);
+    }
+  };
 
   return (
     <>
+
+      {/* Input para seleccionar una imagen */}
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <input type="file" accept="image/*" onChange={handleImageChange} />
+        <button onClick={handleSearch}>Buscar productos</button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+
+      {/* Mostrar la respuesta de la API */}
+      {apiResponse && (
+        <div>
+          <h2>Productos encontrados:</h2>
+          <ul>
+            {apiResponse.map(product => (
+              <li key={product.id}>
+                <h3>{product.name}</h3>
+                <p>Precio: {product.price.value.current} {product.price.currency}</p>
+                <a href={product.link} target="_blank" rel="noopener noreferrer">Ver producto</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
