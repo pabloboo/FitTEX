@@ -3,79 +3,81 @@ import "./App.css";
 import { mockApiCall } from "./services/mockApi";
 
 function App() {
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [apiResponse, setApiResponse] = useState<any[] | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      setSelectedImage(file);
-
-      // Create an URL for the image preview
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      await handleSearch(file);
     }
   };
 
-  const handleSearch = async () => {
-    if (selectedImage) {
-      setLoading(true);
-      const imageUrl = URL.createObjectURL(selectedImage);
-      const response = await mockApiCall(imageUrl);
-      setApiResponse(response);
-      setImagePreview(null);
-      setLoading(false);
-    }
+  const handleSearch = async (file: File) => {
+    setLoading(true);
+    const imageUrl = URL.createObjectURL(file);
+    const response = await mockApiCall(imageUrl);
+    setApiResponse(response);
+    setLoading(false);
+  };
+
+  const handleTextSearch = () => {
+    //TODO: Implement text search functionality
+    console.log("Searching for:", searchQuery);
+  };
+
+  const triggerFileInput = () => {
+    document.getElementById("file-upload")?.click();
   };
 
   return (
     <div className="App">
-      <h1>Buscador de Productos por Imagen</h1>
-      <div>
-        <label htmlFor="file-upload" className="custom-file-upload">
-          Seleccionar imagen
-        </label>
+      <div className="search-container">
+        <img src="/src/assets/logo-FitTEX.png" alt="Logo" className="logo" />
+        <div className="search-bar">
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button onClick={handleTextSearch}>Search</button>
+          <button
+            onClick={triggerFileInput}
+            disabled={loading}
+            className={`image-search-button ${loading ? "loading" : ""}`}
+            title="Search by image"
+          >
+            <img
+              src="/src/assets/image-search-icon.png"
+              alt="Search by image"
+              className="image-search-icon"
+            />
+          </button>
+        </div>
         <input
           id="file-upload"
           type="file"
           accept="image/*"
           onChange={handleImageChange}
+          style={{ display: "none" }}
         />
-        <button onClick={handleSearch} disabled={loading}>
-          {loading ? "Buscando..." : "Buscar productos"}
-        </button>
       </div>
-
-      {/* Preview of the image */}
-      {imagePreview && (
-        <div className="image-preview-container">
-          <img
-            src={imagePreview}
-            alt="Vista previa de la imagen seleccionada"
-            className="image-preview"
-          />
-          <p className="image-confirmation">✅ Imagen cargada correctamente</p>
-        </div>
-      )}
 
       {/* Show response of the API */}
       {apiResponse && (
-        <div>
-          <h2>Productos encontrados:</h2>
+        <div className="results-container">
+          <h2>Products found:</h2>
           <ul>
             {apiResponse.map((product) => (
               <li key={product.id}>
                 <h3>{product.name}</h3>
                 <p>
-                  Precio: {product.price.value.current} {product.price.currency}
+                  Price: {product.price.value.current} {product.price.currency}
                 </p>
                 <a href={product.link} target="_blank" rel="noopener noreferrer">
-                  Ver producto
+                  See product
                 </a>
               </li>
             ))}

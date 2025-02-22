@@ -1,6 +1,9 @@
 /* General body styles: Sets the default font, background color, text color, and line height for the entire page. */
-body {
+html, body {
   margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   background-color: #f8f8f8;
   color: #333;
@@ -9,86 +12,106 @@ body {
 
 /* Root container: Centers the content and sets a maximum width for the application. */
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
 }
 
 /* Main app container: Centers content vertically and horizontally, and ensures it takes up the full viewport height. */
 .App {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  padding: 20px;
   text-align: center;
 }
 
-/* Heading styles: Defines the font size, weight, color, and spacing for h1, h2, and h3 elements. */
-h1 {
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #000;
+/* Search container: Styles for the search bar and logo */
+.search-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.logo {
+  width: 150px;
   margin-bottom: 20px;
 }
 
-h2 {
-  font-size: 2rem;
-  color: #000;
-  margin-bottom: 15px;
+.search-bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-h3 {
-  font-size: 1.5rem;
-  color: #000;
-  margin-bottom: 10px;
+.search-bar input {
+  width: 400px;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-right: 10px;
 }
 
-/* Button styles: Defines the appearance of buttons, including hover and disabled states. */
-button {
+/* Estilos generales para los botones de búsqueda (excepto el de imagen) */
+.search-bar button:not(.image-search-button) {
   background-color: #000;
   color: #fff;
   border: none;
   padding: 10px 20px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 10px;
-}
-
-button:hover {
-  background-color: #333;
-}
-
-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-/* File input styles: Hides the default file input and styles a custom file upload button. */
-input[type="file"] {
-  display: none;
-}
-
-.custom-file-upload {
-  border: 2px solid #000;
-  padding: 10px 20px;
-  font-size: 1rem;
-  cursor: pointer;
-  background-color: #fff;
-  color: #000;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  border-radius: 4px;
   margin-right: 10px;
 }
 
-.custom-file-upload:hover {
-  background-color: #000;
-  color: #fff;
+.search-bar button:not(.image-search-button):hover {
+  background-color: #333;
+}
+
+/* Image search button styles */
+.image-search-button {
+  background-color: #fff;
+  border: 2px solid #000;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  margin-right: 10px;
+}
+
+.image-search-button:hover {
+  background-color: #f0f0f0;
+  border-color: #333;
+}
+
+.image-search-button.loading {
+  background-color: #ccc;
+  border-color: #ccc;
+  cursor: not-allowed;
+}
+
+.image-search-button .image-search-icon {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0);
 }
 
 /* Product list styles: Defines the layout and appearance of the product list and its items. */
+.results-container {
+  margin-top: 40px;
+}
+
 ul {
   list-style: none;
   padding: 0;
@@ -135,70 +158,21 @@ p {
 
 /* Responsive styles for tablets and smaller screens: Adjusts font sizes, button widths, and layout for smaller devices. */
 @media (max-width: 768px) {
-  h1 {
-    font-size: 2rem;
+  .search-bar input {
+    width: 300px;
   }
 
-  h2 {
-    font-size: 1.75rem;
-  }
-
-  h3 {
-    font-size: 1.25rem;
-  }
-
-  button {
-    width: 100%;
-    margin-top: 15px;
-  }
-
-  .custom-file-upload {
-    width: 100%;
-    margin-right: 0;
-    margin-bottom: 10px;
-  }
-
-  ul {
-    grid-template-columns: 1fr;
+  .search-bar button:not(.image-search-button) {
+    padding: 10px 15px;
   }
 }
 
-/* Responsive styles for mobile devices: Further adjusts font sizes and padding for very small screens. */
 @media (max-width: 480px) {
-  h1 {
-    font-size: 1.75rem;
+  .search-bar input {
+    width: 200px;
   }
 
-  h2 {
-    font-size: 1.5rem;
+  .search-bar button:not(.image-search-button) {
+    padding: 8px 12px;
   }
-
-  h3 {
-    font-size: 1.1rem;
-  }
-
-  .App {
-    padding: 10px;
-  }
-}
-
-/* Image preview styles: Defines the appearance of the image preview container and confirmation message. */
-.image-preview-container {
-  margin-top: 20px;
-  text-align: center;
-}
-
-.image-preview {
-  max-width: 200px;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-top: 10px;
-}
-
-.image-confirmation {
-  font-size: 1rem;
-  color: #4caf50;
-  margin-top: 10px;
-  font-weight: bold;
 }
