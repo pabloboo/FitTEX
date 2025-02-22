@@ -17,8 +17,8 @@ DATA_PATH?=$(shell pwd)/data
         -v $(DATA_PATH):/data \
         --privileged \
         --gpus all \
-        $(PROJECT_NAME) \
-        bash
+        --network host \
+        $(PROJECT_NAME) bash
 
 --run: --build
 	docker run --rm \
