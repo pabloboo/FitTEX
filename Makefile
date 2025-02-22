@@ -25,5 +25,14 @@ DATA_PATH?=$(shell pwd)/data
 		--name $(PROJECT_NAME)-container \
 		$(PROJECT_NAME)
 
-build: --set-dev --build
+build: --build
 shell: --build --user-shell
+notebook/run: --notebook-run
+
+
+--notebook: CMD = jupyter server \
+					--ServerApp.ip=0.0.0.0 \
+					--ServerApp.root_dir=/home/${HOST_USER} \
+					--ServerApp.token='fittex'
+
+--notebook-run: --notebook --user-shell
