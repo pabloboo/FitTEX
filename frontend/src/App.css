@@ -1,3 +1,13 @@
+/* General body styles: Sets the default font, background color, text color, and line height for the entire page. */
+body {
+  margin: 0;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background-color: #f8f8f8;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Root container: Centers the content and sets a maximum width for the application. */
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -5,38 +15,190 @@
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Main app container: Centers content vertically and horizontally, and ensures it takes up the full viewport height. */
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  text-align: center;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Heading styles: Defines the font size, weight, color, and spacing for h1, h2, and h3 elements. */
+h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 2rem;
+  color: #000;
+  margin-bottom: 15px;
+}
+
+h3 {
+  font-size: 1.5rem;
+  color: #000;
+  margin-bottom: 10px;
+}
+
+/* Button styles: Defines the appearance of buttons, including hover and disabled states. */
+button {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #333;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* File input styles: Hides the default file input and styles a custom file upload button. */
+input[type="file"] {
+  display: none;
+}
+
+.custom-file-upload {
+  border: 2px solid #000;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  background-color: #fff;
+  color: #000;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin-right: 10px;
+}
+
+.custom-file-upload:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+/* Product list styles: Defines the layout and appearance of the product list and its items. */
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+li {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+li:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Link styles: Defines the appearance of links, including hover effects. */
+a {
+  color: #e60000;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #b30000;
+}
+
+/* Paragraph styles: Defines the font size, color, and spacing for paragraph elements. */
+p {
+  font-size: 1.1rem;
+  color: #555;
+  margin: 5px 0;
+}
+
+/* Responsive styles for tablets and smaller screens: Adjusts font sizes, button widths, and layout for smaller devices. */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2rem;
   }
-  to {
-    transform: rotate(360deg);
+
+  h2 {
+    font-size: 1.75rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+
+  button {
+    width: 100%;
+    margin-top: 15px;
+  }
+
+  .custom-file-upload {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  ul {
+    grid-template-columns: 1fr;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+/* Responsive styles for mobile devices: Further adjusts font sizes and padding for very small screens. */
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+  }
+
+  .App {
+    padding: 10px;
   }
 }
 
-.card {
-  padding: 2em;
+/* Image preview styles: Defines the appearance of the image preview container and confirmation message. */
+.image-preview-container {
+  margin-top: 20px;
+  text-align: center;
 }
 
-.read-the-docs {
-  color: #888;
+.image-preview {
+  max-width: 200px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+}
+
+.image-confirmation {
+  font-size: 1rem;
+  color: #4caf50;
+  margin-top: 10px;
+  font-weight: bold;
 }

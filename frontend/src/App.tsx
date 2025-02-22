@@ -1,35 +1,83 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
+import { mockApiCall } from "./services/mockApi";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [apiResponse, setApiResponse] = useState<any[] | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      setSelectedImage(file);
+
+      // Create an URL for the image preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSearch = async () => {
+    if (selectedImage) {
+      const imageUrl = URL.createObjectURL(selectedImage);
+      const response = await mockApiCall(imageUrl);
+      setApiResponse(response);
+    }
+  };
 
   return (
-    <>
+    <div className="App">
+      <h1>Buscador de Productos por Imagen</h1>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <label htmlFor="file-upload" className="custom-file-upload">
+          Seleccionar imagen
+        </label>
+        <input
+          id="file-upload"
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+        />
+        <button onClick={handleSearch}>Buscar productos</button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+
+      {/* Preview of the image */}
+      {imagePreview && (
+        <div className="image-preview-container">
+          <img
+            src={imagePreview}
+            alt="Vista previa de la imagen seleccionada"
+            className="image-preview"
+          />
+          <p className="image-confirmation">✅ Imagen cargada correctamente</p>
+        </div>
+      )}
+
+      {/* Show response of the API */}
+      {apiResponse && (
+        <div>
+          <h2>Productos encontrados:</h2>
+          <ul>
+            {apiResponse.map((product) => (
+              <li key={product.id}>
+                <h3>{product.name}</h3>
+                <p>
+                  Precio: {product.price.value.current} {product.price.currency}
+                </p>
+                <a href={product.link} target="_blank" rel="noopener noreferrer">
+                  Ver producto
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
