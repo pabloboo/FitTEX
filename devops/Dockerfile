@@ -25,16 +25,9 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# Then, add the rest of the project source code and install it
-# Installing separately from its dependencies allows optimal layer caching
-ADD . $APP_HOME
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-dev
-
 # Place executables in the environment at the front of the path
 ENV PATH=${VIRTUAL_ENV}/bin:${PATH}
 
-RUN curl -L https://ollama.com/download/ollama-linux-amd64.tgz -o ollama-linux-amd64.tgz \
-    && tar -C /usr -xzf ollama-linux-amd64.tgz \
-    && rm ollama-linux-amd64.tgz
-
+RUN --mount=type=cache,target=/root/.cache/ollama \
+    curl -L https://ollama.com/download/ollama-linux-amd64.tgz -o /root/.cache/ollama/ollama-linux-amd64.tgz && \
+    tar -C /usr -xzf /root/.cache/ollama/ollama-linux-amd64.tgz
