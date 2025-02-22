@@ -44,26 +44,28 @@ function App() {
   const [showResults, setShowResults] = useState(false);
 
   // Handles image selection and triggers product search
-  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target?.files[0]) {
-      const file = event.target?.files[0];
-      setSelectedImage(file);
+const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  if (event.target.files && event.target?.files[0]) {
+    const file = event.target?.files[0];
+    setSelectedImage(file);
 
-      // Create a preview of the selected image
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+    // Subir la imagen al servidor y obtener la URL pública
+    setImageLoading(true);
+    const formData = new FormData();
+    formData.append('image', file);
 
-      // Trigger search after image is selected
-      setApiResponse(null);
-      setImageLoading(true);
-      let imageUrl = URL.createObjectURL(file);
-      imageUrl = imageUrl.replace('blob:', '');
+    try {
+      const uploadResponse = await axios.post('http://localhost:3000/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      const imageUrl = uploadResponse.data.imageUrl;
+
+      // Realizar la búsqueda de productos con la URL pública
       const response = await fetchProducts(imageUrl);
       setApiResponse(response);
-      setImageLoading(false);
 
       // Trigger animation on first search
       if (!firstSearchDone) {
@@ -76,9 +78,12 @@ function App() {
         setShowResults(true);
         setImageLoading(false);
       }, 500);
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      setImageLoading(false);
     }
-  };
-
+  }
+};
   // Handles text-based search
   const handleTextSearch = async () => {
     setApiResponse(null);
