@@ -6,7 +6,8 @@ interface SearchBarProps {
   onSearchQueryChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onTextSearch: () => void;
   onImageSearch: () => void;
-  loading: boolean;
+  imageLoading: boolean;
+  textLoading: boolean;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({
@@ -14,7 +15,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
   onSearchQueryChange,
   onTextSearch,
   onImageSearch,
-  loading,
+  imageLoading,
+  textLoading,
 }) => {
   return (
     <div className="search-bar">
@@ -24,11 +26,17 @@ const SearchBar: React.FC<SearchBarProps> = ({
         value={searchQuery}
         onChange={onSearchQueryChange}
       />
-      <button onClick={onTextSearch}>Search</button>
+      <button
+        onClick={onTextSearch}
+        disabled={textLoading}
+        className={`text-search-button ${textLoading ? "loading" : ""}`}
+      >
+        {textLoading ? "Searching..." : "Search"}
+      </button>
       <button
         onClick={onImageSearch}
-        disabled={loading}
-        className={`image-search-button ${loading ? "loading" : ""}`}
+        disabled={imageLoading}
+        className={`image-search-button ${imageLoading ? "loading" : ""}`}
         title="Search by image"
       >
         <img

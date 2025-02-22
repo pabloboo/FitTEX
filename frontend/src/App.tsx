@@ -34,8 +34,12 @@ function App() {
   const [firstSearchDone, setFirstSearchDone] = useState(false);
   // State for triggering the animation (not used directly in the UI)
   const [, setAnimateUp] = useState(false);
-  // State for managing the loading state (shows loading indicator)
-  const [loading, setLoading] = useState(false);
+
+  // State for managing the loading state for image search
+  const [imageLoading, setImageLoading] = useState(false);
+  // State for managing the loading state for text search
+  const [textLoading, setTextLoading] = useState(false);
+
   // State for controlling the visibility of the results section
   const [showResults, setShowResults] = useState(false);
 
@@ -54,12 +58,12 @@ function App() {
 
       // Trigger search after image is selected
       setApiResponse(null);
-      setLoading(true);
+      setImageLoading(true);
       let imageUrl = URL.createObjectURL(file);
       imageUrl = imageUrl.replace('blob:', '');
       const response = await fetchProducts(imageUrl);
       setApiResponse(response);
-      setLoading(false);
+      setImageLoading(false);
 
       // Trigger animation on first search
       if (!firstSearchDone) {
@@ -70,7 +74,7 @@ function App() {
       // Delay results display by 500ms
       setTimeout(() => {
         setShowResults(true);
-        setLoading(false);
+        setImageLoading(false);
       }, 500);
     }
   };
@@ -78,7 +82,7 @@ function App() {
   // Handles text-based search
   const handleTextSearch = async () => {
     setApiResponse(null);
-    setLoading(true);
+    setTextLoading(true); // Use textLoading for text search
     const response = await mockTextSearchApiCall(searchQuery);
     setApiResponse(response);
 
@@ -91,7 +95,7 @@ function App() {
     // Delay results display by 500ms
     setTimeout(() => {
       setShowResults(true);
-      setLoading(false);
+      setTextLoading(false);
     }, 500);
   };
 
@@ -104,7 +108,8 @@ function App() {
           onSearchQueryChange={(e) => setSearchQuery(e.target.value)}
           onTextSearch={handleTextSearch}
           onImageSearch={() => document.getElementById("file-upload")?.click()}
-          loading={loading}
+          imageLoading={imageLoading}
+          textLoading={textLoading}
         />
         <ImageUploader onImageChange={handleImageChange} />
       </div>
