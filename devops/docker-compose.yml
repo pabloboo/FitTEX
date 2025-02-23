@@ -1,0 +1,33 @@
+services:
+  fittex:
+    build:
+      context: ../
+      dockerfile: devops/Dockerfile
+    environment:
+      - MODEL_NAME=your_model_name_here
+      - MODEL_FILE=your_model_file_path_here
+    volumes:
+      - ./:/app  # Monta el directorio actual en /app en el contenedor
+    ports:
+      - "8080:8080"
+    networks:
+      - devops-network
+
+  ollama:
+    build:
+        context: ../
+        dockerfile: devops/ollama.Dockerfile
+    container_name: ollama_container
+    depends_on:
+      - fittex
+    volumes:
+      - ../:/app
+    ports:
+      - "8081:8080"
+    command: ollama create "fittex" -f "/app/weights/lora_model/Modelfile"
+    networks:
+      - devops-network
+
+networks:
+    devops-network:
+        driver: bridge

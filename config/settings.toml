@@ -1,0 +1,10 @@
+[data]
+lora_path = "/app/data/LoRA/fashion_dataset.csv"
+
+[logging]
+level = "info"
+path = "/app/logs"
+
+[inference]
+model_name = "fittex"
+url = "http://localhost:11434/api/chat"

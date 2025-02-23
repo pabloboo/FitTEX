@@ -32,18 +32,6 @@ const searchProducts = async (query: string, brand?: string) => {
   }
 };
 
-const getOrder = async (brand: string, id: string) => {
-  try {
-    const response = await axios.get('http://localhost:3000/order', {
-      params: { brand, id },
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching order:', error);
-    return null;
-  }
-};
-
 function App() {
   const [, setSelectedImage] = useState<File | null>(null);
   const [, setImagePreview] = useState<string | null>(null);
@@ -98,51 +86,9 @@ function App() {
   // Handles text-based search
   const handleTextSearch = async () => {
     setApiResponse(null);
-    setTextLoading(true);
-
-    let query = searchQuery.trim();
-    let brand: string | undefined = undefined;
-
-    const isOrderId = !isNaN(Number(query.split(' ')[0])); // Verifica si el primer término es un número
-
-    if (isOrderId) {
-      const terms = query.split(' ');
-      const id = terms[0]; // El primer término es el ID
-      query = terms.slice(1).join(' '); // El resto son la marca y/o otros términos
-
-      for (const authorizedBrand of AUTHORIZED_BRANDS) {
-        if (query.toLowerCase().includes(authorizedBrand)) {
-          brand = authorizedBrand;
-          break;
-        }
-      }
-
-      if (!brand) {
-        brand = 'zara';
-      }
-
-      try {
-        const response = await getOrder(brand, id);
-        setApiResponse(response ? [response] : null); // Asegurarse de que la respuesta sea un array
-      } catch (error) {
-        console.error('Error fetching order:', error);
-      }
-    } else {
-      for (const authorizedBrand of AUTHORIZED_BRANDS) {
-        if (query.toLowerCase().includes(authorizedBrand)) {
-          brand = authorizedBrand;
-          query = query.replace(new RegExp(authorizedBrand, 'i'), '').trim(); // Eliminar la marca del query
-          break;
-        }
-      }
-
-      try {
-        const response = await searchProducts(query, brand);
-        setApiResponse(response);
-      } catch (error) {
-        console.error('Error during search:', error);
-      }
-    }
+    setTextLoading(true); // Use textLoading for text search
+    const response = await processPrompt(searchQuery);
+    setApiResponse(response);
 
     // Trigger animation on first search
     if (!firstSearchDone) {
@@ -155,6 +101,24 @@ function App() {
       setShowResults(true);
       setTextLoading(false);
     }, 500);
+  };
+
+  const processPrompt = async (prompt: string) => {
+    const response = await fetch('http://127.0.0.1:8000/process-prompt', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ prompt }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Error processing the prompt');
+    }
+
+    console.log(response.json());
+
+    return response.json();
   };
 
   return (
