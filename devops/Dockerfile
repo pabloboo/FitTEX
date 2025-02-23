@@ -31,6 +31,6 @@ RUN --mount=type=cache,target=/root/.cache/ollama \
     curl -L https://ollama.com/download/ollama-linux-amd64.tgz -o /root/.cache/ollama/ollama-linux-amd64.tgz && \
     tar -C /usr -xzf /root/.cache/ollama/ollama-linux-amd64.tgz
 
-#RUN ollama serve &
+RUN ollama serve &
 
 #RUN ollama create "$MODEL_NAME" -f "$MODEL_FILE"

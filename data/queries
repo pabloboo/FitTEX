@@ -1,0 +1,71 @@
+Q1:
+
+curl http://localhost:11434/api/chat -d '{
+  "model": "model",
+  "messages": [
+    { "role": "user", "content": "I want a red skirt" }
+  ]
+}'
+
+Response:
+
+{"model":"model","created_at":"2025-02-23T01:04:49.59374532Z","message":{"role":"assistant","content":"red"},"done":false}
+{"model":"model","created_at":"2025-02-23T01:04:49.675601566Z","message":{"role":"assistant","content":" skirt"},"done":false}
+{"model":"model","created_at":"2025-02-23T01:04:49.787055893Z","message":{"role":"assistant","content":""},"done_reason":"stop","done":true,"total_duration":14971727103,"load_duration":13787122746,"prompt_eval_count":65,"prompt_eval_duration":927000000,"eval_count":3,"eval_duration":231000000}
+
+Q2:
+
+curl http://localhost:11434/api/chat -d '{
+  "model": "model",
+  "messages": [
+    { "role": "user", "content": "I want a red skirt and a blue shirt" }
+  ]
+}'
+
+Response:
+
+{"model":"model","created_at":"2025-02-23T01:05:40.130001528Z","message":{"role":"assistant","content":"red"},"done":false}
+{"model":"model","created_at":"2025-02-23T01:05:40.239795493Z","message":{"role":"assistant","content":" skirt"},"done":false}
+{"model":"model","created_at":"2025-02-23T01:05:40.353626032Z","message":{"role":"assistant","content":","},"done":false}
+{"model":"model","created_at":"2025-02-23T01:05:40.466678672Z","message":{"role":"assistant","content":" blue"},"done":false}
+{"model":"model","created_at":"2025-02-23T01:05:40.577484719Z","message":{"role":"assistant","content":" shirt"},"done":false}
+{"model":"model","created_at":"2025-02-23T01:05:40.688792223Z","message":{"role":"assistant","content":""},"done_reason":"stop","done":true,"total_duration":790650113,"load_duration":54141261,"prompt_eval_count":69,"prompt_eval_duration":174000000,"eval_count":6,"eval_duration":560000000}
+
+
+Q3:
+
+curl http://localhost:11434/api/chat -d '{
+  "model": "model",
+  "messages": [
+    { "role": "user", "content": "I want a red skirt and a blue shirt from Zara" }
+  ]
+}'
+
+Response:
+
+{"model":"model","created_at":"2025-02-23T01:06:02.304382193Z","message":{"role":"assistant","content":"red"},"done":false}
+{"model":"model","created_at":"2025-02-23T01:06:02.413260177Z","message":{"role":"assistant","content":" skirt"},"done":false}
+{"model":"model","created_at":"2025-02-23T01:06:02.523700361Z","message":{"role":"assistant","content":","},"done":false}
+{"model":"model","created_at":"2025-02-23T01:06:02.634968738Z","message":{"role":"assistant","content":" blue"},"done":false}
+{"model":"model","created_at":"2025-02-23T01:06:02.746055403Z","message":{"role":"assistant","content":" shirt"},"done":false}
+{"model":"model","created_at":"2025-02-23T01:06:02.858856686Z","message":{"role":"assistant","content":" |"},"done":false}
+{"model":"model","created_at":"2025-02-23T01:06:02.972545565Z","message":{"role":"assistant","content":" Z"},"done":false}
+{"model":"model","created_at":"2025-02-23T01:06:03.087352636Z","message":{"role":"assistant","content":"ara"},"done":false}
+{"model":"model","created_at":"2025-02-23T01:06:03.19837013Z","message":{"role":"assistant","content":""},"done_reason":"stop","done":true,"total_duration":1128132284,"load_duration":18980326,"prompt_eval_count":72,"prompt_eval_duration":210000000,"eval_count":9,"eval_duration":897000000}
+
+
+Q4:
+
+curl http://localhost:11434/api/chat -d '{
+  "model": "model",
+  "messages": [
+    { "role": "user", "content": "I want big trousers from Oysho" }
+  ]
+}'
+{"model":"model","created_at":"2025-02-23T01:07:41.375953906Z","message":{"role":"assistant","content":"big"},"done":false}
+{"model":"model","created_at":"2025-02-23T01:07:41.485446592Z","message":{"role":"assistant","content":" trousers"},"done":false}
+{"model":"model","created_at":"2025-02-23T01:07:41.600099112Z","message":{"role":"assistant","content":" |"},"done":false}
+{"model":"model","created_at":"2025-02-23T01:07:41.71361742Z","message":{"role":"assistant","content":" Oy"},"done":false}
+{"model":"model","created_at":"2025-02-23T01:07:41.825130812Z","message":{"role":"assistant","content":"sh"},"done":false}
+{"model":"model","created_at":"2025-02-23T01:07:41.935735537Z","message":{"role":"assistant","content":"o"},"done":false}
+{"model":"model","created_at":"2025-02-23T01:07:42.046407119Z","message":{"role":"assistant","content":""},"done_reason":"stop","done":true,"total_duration":931957200,"load_duration":42787383,"prompt_eval_count":68,"prompt_eval_duration":214000000,"eval_count":7,"eval_duration":674000000}
