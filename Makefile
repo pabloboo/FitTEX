@@ -1,38 +1,46 @@
-SHELL:=/bin/bash
-PROJECT_NAME?=fittex
-HOST_USER?=$(shell whoami)
-DATA_PATH?=$(shell pwd)/data
+SHELL := /bin/bash
+PROJECT_NAME ?= fittex
+HOST_USER ?= $(shell whoami)
+DATA_PATH ?= $(shell pwd)/data
 
---build:
+.PHONY: build shell notebook
+
+# Build the Docker image
+build:
 	docker build \
 		-t $(PROJECT_NAME) \
 		-f devops/Dockerfile \
 		.
 
---user-shell: --build
+# Run an interactive shell in the container
+shell: build
 	docker run --rm -it \
-        -e HOME=/home/$(HOST_USER) \
-        --name $(PROJECT_NAME)-container \
-        -v $(shell pwd):/opt/project \
-        -v $(DATA_PATH):/data \
-        --privileged \
-        --gpus all \
-        --network host \
-        $(PROJECT_NAME) bash
+		-e HOME=/home/$(HOST_USER) \
+		--name $(PROJECT_NAME)-container \
+		-v $(shell pwd):/opt/project \
+		-v $(DATA_PATH):/data \
+		--privileged \
+		--network host \
+		$(PROJECT_NAME) bash
 
---run: --build
+# Run the container (non-interactive)
+run: build
 	docker run --rm \
 		--name $(PROJECT_NAME)-container \
 		$(PROJECT_NAME)
 
-build: --build
-shell: --build --user-shell
-notebook/run: --notebook-run
-
-
---notebook: CMD = jupyter server \
-					--ServerApp.ip=0.0.0.0 \
-					--ServerApp.root_dir=/home/${HOST_USER} \
-					--ServerApp.token='fittex'
-
---notebook-run: --notebook --user-shell
+# Run a Jupyter notebook server in the container
+notebook: build
+	docker run --rm -it \
+		-e HOME=/home/$(HOST_USER) \
+		--name $(PROJECT_NAME)-notebook \
+		-v $(shell pwd):/opt/project \
+		-v $(DATA_PATH):/data \
+		--privileged \
+		--network host \
+		-p 8888:8888 \
+		$(PROJECT_NAME) \
+		jupyter server \
+			--ServerApp.ip=0.0.0.0 \
+			--ServerApp.root_dir=/home/$(HOST_USER) \
+			--ServerApp.token='fittex'

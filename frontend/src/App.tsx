@@ -88,7 +88,7 @@ const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => 
   const handleTextSearch = async () => {
     setApiResponse(null);
     setTextLoading(true); // Use textLoading for text search
-    const response = await mockTextSearchApiCall(searchQuery);
+    const response = await processPrompt(searchQuery);
     setApiResponse(response);
 
     // Trigger animation on first search
@@ -102,6 +102,24 @@ const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => 
       setShowResults(true);
       setTextLoading(false);
     }, 500);
+  };
+
+  const processPrompt = async (prompt: string) => {
+    const response = await fetch('http://127.0.0.1:8000/process-prompt', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ prompt }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Error processing the prompt');
+    }
+
+    console.log(response.json());
+
+    return response.json();
   };
 
   return (

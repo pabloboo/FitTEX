@@ -3,8 +3,8 @@ import logging
 from typing import List, Tuple
 from fuzzywuzzy import fuzz
 
-from config.config import settings
-from constants.constants import BRANDS
+from src.config.config import settings
+from src.constants.constants import BRANDS
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,14 @@ class FashionAssistant:
         :param threshold: The minimum similarity score to consider a match.
         :return: A tuple containing a list of clothes and the closest matching brand.
         """
-        clothes_raw, brand_raw = output.split('|')
+        print("OUTPUT")
+        print(output)
+        response = output.split("|")
+        if len(response) == 1:
+            return response, ""
+        else:
+            clothes_raw, brand_raw = response
+
         clothes_list = [item.strip() for item in clothes_raw.split(",")]
 
         similarities = {brand: fuzz.ratio(brand_raw.lower(), brand.lower()) for brand in BRANDS}
