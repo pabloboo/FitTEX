@@ -5,8 +5,6 @@ import SearchBar from './components/SearchBar/SearchBar';
 import ImageUploader from './components/ImageUploader/ImageUploader';
 import ProductList from './components/ProductList/ProductList';
 
-const AUTHORIZED_BRANDS = ['lefties', 'massimo_dutti', 'oysho', 'pull_and_bear', 'stradivarius', 'zara', 'zara_home'];
-
 // Fetches products from the API based on an image URL
 const fetchProducts = async (imageUrl: string) => {
   try {
@@ -34,7 +32,6 @@ const searchProducts = async (query: string, brand?: string) => {
 
 function App() {
   const [, setSelectedImage] = useState<File | null>(null);
-  const [, setImagePreview] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [apiResponse, setApiResponse] = useState<any[] | null>(null);
   const [firstSearchDone, setFirstSearchDone] = useState(false);
@@ -87,20 +84,33 @@ function App() {
   const handleTextSearch = async () => {
     setApiResponse(null);
     setTextLoading(true); // Use textLoading for text search
-    const response = await processPrompt(searchQuery);
-    setApiResponse(response);
 
-    // Trigger animation on first search
-    if (!firstSearchDone) {
-      setFirstSearchDone(true);
-      setAnimateUp(true);
-    }
+    try {
+      // Process the prompt to get clothes and brand
+      const promptResponse = await processPrompt(searchQuery);
+      console.log(promptResponse);
+      const brand = promptResponse.brand; // Extract brand
+      const query = promptResponse.clothes[0]; // Extract the first clothing item
 
-    // Delay results display by 500ms
-    setTimeout(() => {
-      setShowResults(true);
+      // Search products using the extracted query and brand
+      const searchResponse = await searchProducts(query, brand);
+      setApiResponse(searchResponse);
+
+      // Trigger animation on first search
+      if (!firstSearchDone) {
+        setFirstSearchDone(true);
+        setAnimateUp(true);
+      }
+
+      // Delay results display by 500ms
+      setTimeout(() => {
+        setShowResults(true);
+        setTextLoading(false);
+      }, 500);
+    } catch (error) {
+      console.error('Error processing prompt or searching products:', error);
       setTextLoading(false);
-    }, 500);
+    }
   };
 
   const processPrompt = async (prompt: string) => {
@@ -115,8 +125,6 @@ function App() {
     if (!response.ok) {
       throw new Error('Error processing the prompt');
     }
-
-    console.log(response.json());
 
     return response.json();
   };
