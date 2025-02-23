@@ -17,7 +17,6 @@ DATA_PATH?=$(shell pwd)/data
         -v $(DATA_PATH):/data \
         --privileged \
         --gpus all \
-        --network host \
         $(PROJECT_NAME) bash
 
 --run: --build
