@@ -72,9 +72,10 @@ http://localhost:5173
 
 ## 🖼️ Cómo usar la aplicación
 
-1. **Selecciona una imagen**: Haz clic en el botón "Seleccionar imagen" para cargar una imagen desde tu dispositivo.
-2. **Busca productos**: Haz clic en "Buscar productos" para simular la búsqueda de productos relacionados.
-3. **Explora los resultados**: Los productos encontrados se mostrarán en una lista con detalles como nombre, precio y un enlace para ver más información.
+1. **Buscar productos por imagen similar**: Haz clic en el botón "Seleccionar imagen" para cargar una imagen desde tu dispositivo y la web te recomendará imágenes de tiendas de Inditex relacionadas con la imagen dada.
+2. **Buscar productos por lenguaje natural**: Describe en lenguaje natural la prenda que quieres buscar y la web creará una consulta usando un modelo de lenguaje natural.
+3. **Añadir links a la lista de deseos**: Marca el corazón de un ítem para guardarlo en la lista de deseos y se guardará en tu sesión del navegador para revisarlo más tarde.
+4. **Compartir links en redes sociales**: Selecciona una de las tres redes sociales disponibles para compartir un link.
 
 ---
 
