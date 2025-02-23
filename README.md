@@ -116,9 +116,20 @@ Este proyecto está bajo la licencia **MIT**. Para más detalles, consulta el ar
 
 ## 🙌 Créditos
 
-- Desarrollado por [Mar](https://github.com/MarAlonsoGarcia), [Pablo](https://github.com/pabloboo), [Jandro](https://github.com/jandrogarciagarcia) y[Abel](https://github.com/AbelJuncal).
+- Desarrollado por [Mar](https://github.com/MarAlonsoGarcia), [Pablo](https://github.com/pabloboo), [Alejandro](https://github.com/jandrogarciagarcia) y[Abel](https://github.com/AbelJuncal).
 - Inspirado en [API Inditex](https://developer.inditex.com/apimktplc/web/products).
 
 ---
+
+## Demo
+Búsqueda por prendas similares y compartir prenda en redes sociales:
+
+https://github.com/user-attachments/assets/3e88fd64-6cf2-46aa-9a39-c458b3011a57
+
+Búsqueda en lenguaje natural y añadir una prenda a la wishlist:
+
+https://github.com/user-attachments/assets/b512f1b1-5ee9-434c-9eae-57d608a54dc1
+
+
 
 ¡Gracias por visitar este proyecto! Si tienes alguna pregunta o sugerencia, no dudes en abrir un issue o contactar con los desarrolladores. 😊
